@@ -1,0 +1,1 @@
+Penyimpan sandi pribadi yang sederhana. Simpan semua sandi di satu tempat.

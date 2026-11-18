@@ -21,7 +21,7 @@
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:calc(var(--hh,3.6rem) + 5rem);font-family:'Plus Jakarta Sans',system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-body{background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden;transition:background-color .4s,color .4s;line-height:1.6}
+body{background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden;padding-bottom:calc(3.25rem + env(safe-area-inset-bottom,0px));transition:background-color .4s,color .4s;line-height:1.6}
 a{color:var(--accent-text)}
 :focus-visible{outline:3px solid var(--accent-text);outline-offset:3px;border-radius:8px}
 .skip{position:absolute;left:-999px;top:0;background:var(--accent);color:#fff;padding:.6rem 1rem;z-index:100}
@@ -37,12 +37,10 @@ header{position:sticky;top:0;z-index:50;-webkit-backdrop-filter:blur(12px);backd
 .theme:hover{border-color:var(--accent);background:rgba(139,92,246,.12)}
 
 .wrap{width:100%;max-width:52rem;margin:0 auto;padding:0 1.25rem}
-.hero{text-align:center;padding:3.5rem 0 2.5rem}
+.hero{text-align:center;padding:2.75rem 0 2.25rem}
 .hero h1{font-size:clamp(2.5rem,9vw,4rem);font-weight:800;letter-spacing:-.03em;line-height:1.12;margin-bottom:1rem;background:var(--title);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:up .7s ease-out both}
 .tagline{font-size:clamp(1.2rem,4vw,1.6rem);font-weight:700;line-height:1.4;max-width:38rem;margin:0 auto 1rem;animation:up .7s ease-out .15s both}
-.intro{font-size:clamp(1rem,2.5vw,1.1rem);line-height:1.75;color:var(--text2);max-width:37rem;margin:0 auto 2rem;animation:up .7s ease-out .3s both}
-.cta{display:flex;flex-direction:column;gap:.9rem;max-width:20rem;margin:0 auto;animation:up .7s ease-out .45s both}
-@media(min-width:540px){.cta{flex-direction:row;max-width:none;justify-content:center}}
+.intro{font-size:clamp(1rem,2.5vw,1.1rem);line-height:1.75;color:var(--text2);max-width:37rem;margin:0 auto;animation:up .7s ease-out .3s both}
 .btn{display:inline-flex;align-items:center;justify-content:center;padding:.9rem 1.7rem;border-radius:14px;font:inherit;font-size:1rem;font-weight:600;text-decoration:none;cursor:pointer;transition:transform .25s,box-shadow .25s,background-color .25s,border-color .25s}
 .btn.primary{background:var(--accent);color:#fff;border:1px solid transparent;box-shadow:0 8px 24px -4px var(--glow)}
 .btn.primary:hover{background:var(--accent-h);transform:translateY(-2px)}
@@ -51,18 +49,19 @@ header{position:sticky;top:0;z-index:50;-webkit-backdrop-filter:blur(12px);backd
 
 .tabbar{position:sticky;top:var(--hh,3.6rem);z-index:40;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);background:var(--glass);border-bottom:1px solid var(--line)}
 [role=tablist]{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;padding:.6rem 0}
-[role=tab]{font:inherit;font-weight:700;color:var(--muted);background:transparent;border:1px solid transparent;border-radius:12px;padding:.8rem .5rem;cursor:pointer;transition:all .25s}
+[role=tab]{font:inherit;font-weight:700;color:var(--muted);background:transparent;border:1px solid var(--line);border-radius:12px;padding:.8rem .5rem;cursor:pointer;transition:all .25s}
 [role=tab]:hover{color:var(--text)}
 [role=tab][aria-selected=true]{color:var(--text);background:rgba(139,92,246,.14);border-color:var(--accent)}
 
-main{flex:1;padding:2.25rem 0 1rem}
+main{flex:1;padding:3rem 0 1rem}
 h2{font-size:1.6rem;font-weight:700;letter-spacing:-.01em;margin-bottom:.35rem}
 .lead{color:var(--text2);max-width:38rem;margin-bottom:1.6rem}
 .cards{display:grid;gap:1.1rem;grid-template-columns:1fr}
 @media(min-width:640px){.cards{grid-template-columns:repeat(2,1fr)}}
 .card{background:var(--glass);border:1px solid var(--line);border-radius:16px;padding:1.4rem;display:flex;flex-direction:column;gap:.55rem;transition:transform .25s,border-color .25s}
 .card:hover{transform:translateY(-3px);border-color:var(--accent)}
-.card h3{font-size:1.15rem}
+.card h3{font-size:1.15rem;text-wrap:balance}
+h2{text-wrap:balance}
 .card p{color:var(--text2);font-size:.97rem}
 .card.note p{white-space:pre-line}
 .card time{font-size:.88rem;font-weight:600;color:var(--accent-text)}
@@ -72,7 +71,7 @@ h2{font-size:1.6rem;font-weight:700;letter-spacing:-.01em;margin-bottom:.35rem}
 .empty{color:var(--muted)}
 .more{display:block;margin:1.5rem auto 0}
 [hidden]{display:none!important}
-footer{margin-top:3rem;padding:2rem 1.25rem calc(2rem + env(safe-area-inset-bottom,0px));text-align:center;border-top:1px solid var(--line);color:var(--muted);font-size:.9rem}
+footer{position:fixed;left:0;right:0;bottom:0;z-index:30;padding:.6rem 1rem calc(.6rem + env(safe-area-inset-bottom,0px));text-align:center;font-size:.82rem;color:var(--muted);background:var(--glass);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-top:1px solid var(--line)}
 footer strong{color:var(--text);font-weight:600}
 @keyframes up{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
 @keyframes pulse{0%{transform:translateX(-50%) scale(.95);opacity:.75}100%{transform:translateX(-50%) scale(1.08);opacity:1}}
@@ -96,10 +95,6 @@ footer strong{color:var(--text);font-weight:600}
     <h1 id="judul">UniKorn Studio</h1>
     <p class="tagline">Membangun alat kecil yang berguna, menulis ide yang menguatkan.</p>
     <p class="intro">Selamat datang di ruang pribadiku. Di sini aku berbagi koleksi aplikasi dan ekstensi JieShuo yang kubuat dan kukumpulkan, serta tulisan yang menjaga semangat untuk terus berkarya.</p>
-    <div class="cta">
-      <button type="button" class="btn primary" data-go="inspirasi">Baca inspirasi</button>
-      <button type="button" class="btn ghost" data-go="koleksi">Aplikasi &amp; ekstensi</button>
-    </div>
   </section>
 </div>
 
@@ -107,7 +102,7 @@ footer strong{color:var(--text);font-weight:600}
   <div class="wrap">
     <div role="tablist" aria-label="Pilih bagian">
       <button role="tab" id="tab-inspirasi" aria-controls="panel-inspirasi" aria-selected="true" tabindex="0">Inspirasi</button>
-      <button role="tab" id="tab-koleksi" aria-controls="panel-koleksi" aria-selected="false" tabindex="-1">Aplikasi &amp; Ekstensi</button>
+      <button role="tab" id="tab-koleksi" aria-controls="panel-koleksi" aria-selected="false" tabindex="-1" aria-label="Aplikasi dan ekstensi">Aplikasi</button>
     </div>
   </div>
 </nav>
@@ -128,7 +123,7 @@ footer strong{color:var(--text);font-weight:600}
 </main>
 
 <footer>
-  <p>Dibuat oleh <strong>Maswan</strong> &bull; UniKorn Studio</p>
+  <p>&copy; 2026 <strong>Maswan</strong> &bull; UniKorn Studio</p>
 </footer>
 
 <script>
@@ -253,11 +248,6 @@ tabs.forEach((t, i) => {
     if (n) { e.preventDefault(); show(n.id.replace("tab-", ""), true); }
   });
 });
-document.querySelectorAll("[data-go]").forEach(b => b.addEventListener("click", () => {
-  show(b.dataset.go);
-  const p = document.getElementById("panel-" + b.dataset.go);
-  p.scrollIntoView({ block: "start" }); p.focus({ preventScroll: true });
-}));
 
 /* Tinggi header untuk tab yang menempel */
 const hdr = document.getElementById("top");

@@ -3,133 +3,136 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>UniKorn Studio oleh Maswan</title>
-<meta name="description" content="Koleksi aplikasi dan ekstensi JieShuo, serta tulisan inspirasi dari Maswan.">
+<title>UniKorn Studio</title>
+<meta name="description" content="Tulisan inspirasi serta koleksi aplikasi dan ekstensi JieShuo dari Maswan.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{
-  --bg:#0f172a; --surface:#172036; --line:#2a3550; --text:#f1f5f9; --muted:#a8b3c7;
-  --accent:#8b5cf6; --accent-text:#c4b5fd; --on-accent:#ffffff;
+:root[data-theme="dark"]{
+  --bg:#0b0a16; --glass:rgba(25,22,48,.65); --line:rgba(139,92,246,.25);
+  --text:#fff; --text2:#cbd5e1; --muted:#94a3b8; --accent:#8b5cf6; --accent-h:#7c3aed;
+  --glow:rgba(139,92,246,.35); --accent-text:#c4b5fd; --title:linear-gradient(135deg,#fff 30%,#c4b5fd 100%);
 }
 :root[data-theme="light"]{
-  --bg:#f8fafc; --surface:#ffffff; --line:#d9e0ec; --text:#0f172a; --muted:#475569;
-  --accent:#7c3aed; --accent-text:#6d28d9; --on-accent:#ffffff;
+  --bg:#f8fafc; --glass:rgba(255,255,255,.85); --line:rgba(124,58,237,.22);
+  --text:#0f172a; --text2:#334155; --muted:#64748b; --accent:#7c3aed; --accent-h:#6d28d9;
+  --glow:rgba(124,58,237,.2); --accent-text:#6d28d9; --title:linear-gradient(135deg,#1e1b4b 20%,#7c3aed 100%);
 }
-*{box-sizing:border-box}
-html{scroll-behavior:smooth;scroll-padding-top:5rem}
-body{margin:0;background:var(--bg);color:var(--text);font:1rem/1.65 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-  padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0)}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:calc(var(--hh,3.6rem) + 5rem);font-family:'Plus Jakarta Sans',system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body{background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden;transition:background-color .4s,color .4s;line-height:1.6}
 a{color:var(--accent-text)}
-:focus-visible{outline:3px solid var(--accent-text);outline-offset:3px;border-radius:6px}
-.skip{position:absolute;left:-999px;top:0;background:var(--accent);color:var(--on-accent);padding:.6rem 1rem;z-index:20}
+:focus-visible{outline:3px solid var(--accent-text);outline-offset:3px;border-radius:8px}
+.skip{position:absolute;left:-999px;top:0;background:var(--accent);color:#fff;padding:.6rem 1rem;z-index:100}
 .skip:focus{left:.5rem;top:.5rem}
-.wrap{max-width:68rem;margin:0 auto;padding:0 1.25rem}
+.ambient{position:fixed;top:-15%;left:50%;transform:translateX(-50%);width:100%;max-width:700px;height:500px;background:radial-gradient(circle,var(--glow) 0%,transparent 70%);filter:blur(60px);z-index:-1;pointer-events:none;animation:pulse 8s ease-in-out infinite alternate}
+.grid-bg{position:fixed;inset:0;z-index:-2;pointer-events:none;background-image:linear-gradient(to right,rgba(139,92,246,.05) 1px,transparent 1px),linear-gradient(to bottom,rgba(139,92,246,.05) 1px,transparent 1px);background-size:40px 40px;-webkit-mask-image:radial-gradient(ellipse at top,#000 40%,transparent 80%);mask-image:radial-gradient(ellipse at top,#000 40%,transparent 80%)}
 
-/* Hero */
-.hero{position:relative;overflow:hidden;padding:4.5rem 0 3.5rem;text-align:center}
-.hero::before{content:"";position:absolute;left:50%;top:-8rem;width:34rem;height:34rem;max-width:140vw;transform:translateX(-50%);
-  background:radial-gradient(circle,color-mix(in srgb,var(--accent) 38%,transparent),transparent 65%);pointer-events:none}
-.hero .wrap{position:relative}
-.theme{position:absolute;right:1.25rem;top:0;background:transparent;color:var(--muted);border:1px solid var(--line);
-  border-radius:999px;padding:.45rem .9rem;font:inherit;font-size:.9rem;cursor:pointer}
-.theme:hover{color:var(--text);border-color:var(--accent)}
-h1{margin:1.5rem 0 .25rem;font-size:clamp(2.6rem,10vw,5rem);line-height:1.05;letter-spacing:-.03em;font-weight:800}
-.by{margin:0;color:var(--muted);font-size:1.1rem}
-.by strong{color:var(--text)}
-.tagline{margin:1.75rem auto .75rem;max-width:30rem;font-size:clamp(1.25rem,4.5vw,1.7rem);line-height:1.3;font-weight:650}
-.intro{margin:0 auto;max-width:36rem;color:var(--muted)}
-.cta{display:flex;flex-wrap:wrap;gap:.75rem;justify-content:center;margin-top:2rem}
-.btn{font:inherit;font-weight:650;border-radius:12px;padding:.85rem 1.4rem;cursor:pointer;text-decoration:none;display:inline-block;border:1px solid var(--accent)}
-.btn.primary{background:var(--accent);color:var(--on-accent)}
-.btn.ghost{background:transparent;color:var(--text)}
-.btn:hover{filter:brightness(1.12)}
+header{position:sticky;top:0;z-index:50;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);background:var(--glass);border-bottom:1px solid var(--line);padding:calc(.8rem + env(safe-area-inset-top,0px)) 1.25rem .8rem}
+.nav{max-width:60rem;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:1rem}
+.brand{font-weight:700;font-size:1.05rem;letter-spacing:-.02em;color:var(--text);text-decoration:none;display:flex;align-items:center;gap:.5rem}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent)}
+.theme{background:transparent;border:1px solid var(--line);color:var(--text);padding:.45rem .95rem;border-radius:999px;font:inherit;font-size:.85rem;font-weight:600;cursor:pointer;transition:all .25s}
+.theme:hover{border-color:var(--accent);background:rgba(139,92,246,.12)}
 
-/* Tabs */
-.tabbar{position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);
-  border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top,0)}
+.wrap{width:100%;max-width:52rem;margin:0 auto;padding:0 1.25rem}
+.hero{text-align:center;padding:3.5rem 0 2.5rem}
+.hero h1{font-size:clamp(2.5rem,9vw,4rem);font-weight:800;letter-spacing:-.03em;line-height:1.12;margin-bottom:1rem;background:var(--title);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:up .7s ease-out both}
+.tagline{font-size:clamp(1.2rem,4vw,1.6rem);font-weight:700;line-height:1.4;max-width:38rem;margin:0 auto 1rem;animation:up .7s ease-out .15s both}
+.intro{font-size:clamp(1rem,2.5vw,1.1rem);line-height:1.75;color:var(--text2);max-width:37rem;margin:0 auto 2rem;animation:up .7s ease-out .3s both}
+.cta{display:flex;flex-direction:column;gap:.9rem;max-width:20rem;margin:0 auto;animation:up .7s ease-out .45s both}
+@media(min-width:540px){.cta{flex-direction:row;max-width:none;justify-content:center}}
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:.9rem 1.7rem;border-radius:14px;font:inherit;font-size:1rem;font-weight:600;text-decoration:none;cursor:pointer;transition:transform .25s,box-shadow .25s,background-color .25s,border-color .25s}
+.btn.primary{background:var(--accent);color:#fff;border:1px solid transparent;box-shadow:0 8px 24px -4px var(--glow)}
+.btn.primary:hover{background:var(--accent-h);transform:translateY(-2px)}
+.btn.ghost{background:var(--glass);color:var(--text);border:1px solid var(--line);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.btn.ghost:hover{border-color:var(--accent);transform:translateY(-2px)}
+
+.tabbar{position:sticky;top:var(--hh,3.6rem);z-index:40;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);background:var(--glass);border-bottom:1px solid var(--line)}
 [role=tablist]{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;padding:.6rem 0}
-[role=tab]{font:inherit;font-weight:650;color:var(--muted);background:transparent;border:1px solid transparent;border-radius:12px;padding:.8rem .5rem;cursor:pointer}
+[role=tab]{font:inherit;font-weight:700;color:var(--muted);background:transparent;border:1px solid transparent;border-radius:12px;padding:.8rem .5rem;cursor:pointer;transition:all .25s}
 [role=tab]:hover{color:var(--text)}
-[role=tab][aria-selected=true]{color:var(--text);background:var(--surface);border-color:var(--accent)}
+[role=tab][aria-selected=true]{color:var(--text);background:rgba(139,92,246,.14);border-color:var(--accent)}
 
-/* Content */
-main{padding:2.5rem 0 3rem}
-h2{margin:0 0 .35rem;font-size:1.7rem;letter-spacing:-.01em}
-.lead{margin:0 0 1.75rem;color:var(--muted);max-width:38rem}
-.grid{display:grid;gap:1rem;grid-template-columns:repeat(auto-fill,minmax(17rem,1fr))}
-.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:1.4rem;display:flex;flex-direction:column;gap:.6rem}
-.card h3{margin:0;font-size:1.15rem}
-.card p{margin:0;color:var(--muted)}
-.card .kind{align-self:flex-start;font-size:.85rem;color:var(--accent-text);border:1px solid var(--line);border-radius:999px;padding:.1rem .7rem}
-.card .btn{margin-top:auto;align-self:flex-start;padding:.6rem 1.1rem;font-size:.95rem}
-.card time{font-size:.9rem;color:var(--accent-text)}
-.card.note p{color:var(--text);font-size:1.02rem}
-.empty{color:var(--muted)}
-[hidden]{display:none!important}
-
+main{flex:1;padding:2.25rem 0 1rem}
+h2{font-size:1.6rem;font-weight:700;letter-spacing:-.01em;margin-bottom:.35rem}
+.lead{color:var(--text2);max-width:38rem;margin-bottom:1.6rem}
+.cards{display:grid;gap:1.1rem;grid-template-columns:1fr}
+@media(min-width:640px){.cards{grid-template-columns:repeat(2,1fr)}}
+.card{background:var(--glass);border:1px solid var(--line);border-radius:16px;padding:1.4rem;display:flex;flex-direction:column;gap:.55rem;transition:transform .25s,border-color .25s}
+.card:hover{transform:translateY(-3px);border-color:var(--accent)}
+.card h3{font-size:1.15rem}
+.card p{color:var(--text2);font-size:.97rem}
 .card.note p{white-space:pre-line}
-.card .size{font-size:.9rem;color:var(--muted)}
+.card time{font-size:.88rem;font-weight:600;color:var(--accent-text)}
+.kind{align-self:flex-start;font-size:.82rem;font-weight:600;color:var(--accent-text);border:1px solid var(--line);border-radius:999px;padding:.1rem .7rem}
+.size{font-size:.88rem;color:var(--muted)}
+.card .btn{margin-top:auto;align-self:flex-start;padding:.6rem 1.15rem;font-size:.95rem}
+.empty{color:var(--muted)}
 .more{display:block;margin:1.5rem auto 0}
-footer{border-top:1px solid var(--line);padding:2rem 0 2.5rem;text-align:center;color:var(--muted)}
-footer p{margin:.2rem 0}
-
-@media (prefers-reduced-motion:no-preference){
-  .hero h1{animation:rise .7s ease-out both}
-  @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
-}
-@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+[hidden]{display:none!important}
+footer{margin-top:3rem;padding:2rem 1.25rem calc(2rem + env(safe-area-inset-bottom,0px));text-align:center;border-top:1px solid var(--line);color:var(--muted);font-size:.9rem}
+footer strong{color:var(--text);font-weight:600}
+@keyframes up{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@keyframes pulse{0%{transform:translateX(-50%) scale(.95);opacity:.75}100%{transform:translateX(-50%) scale(1.08);opacity:1}}
+@media(prefers-reduced-motion:reduce){*,::before,::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
 </style>
 </head>
 <body>
 <a class="skip" href="#konten">Lewati ke konten</a>
+<div class="ambient" aria-hidden="true"></div>
+<div class="grid-bg" aria-hidden="true"></div>
 
-<header class="hero">
-  <div class="wrap">
-    <button class="theme" id="theme" type="button" aria-label="Ganti tema gelap atau terang">Tema</button>
-    <h1>UniKorn Studio</h1>
-    <p class="by">oleh <strong>Maswan</strong></p>
+<header id="top">
+  <div class="nav">
+    <a href="#" class="brand" aria-label="UniKorn Studio, ke bagian atas"><span class="dot" aria-hidden="true"></span>UniKorn Studio</a>
+    <button type="button" class="theme" id="theme" aria-label="Ganti tema gelap atau terang">Mode terang</button>
+  </div>
+</header>
+
+<div class="wrap">
+  <section class="hero" aria-labelledby="judul">
+    <h1 id="judul">UniKorn Studio</h1>
     <p class="tagline">Membangun alat kecil yang berguna, menulis ide yang menguatkan.</p>
     <p class="intro">Selamat datang di ruang pribadiku. Di sini aku berbagi koleksi aplikasi dan ekstensi JieShuo yang kubuat dan kukumpulkan, serta tulisan yang menjaga semangat untuk terus berkarya.</p>
     <div class="cta">
-      <button class="btn primary" type="button" data-go="koleksi">Jelajahi koleksi</button>
-      <button class="btn ghost" type="button" data-go="inspirasi">Baca inspirasi</button>
+      <button type="button" class="btn primary" data-go="inspirasi">Baca inspirasi</button>
+      <button type="button" class="btn ghost" data-go="koleksi">Aplikasi &amp; ekstensi</button>
     </div>
-  </div>
-</header>
+  </section>
+</div>
 
 <nav class="tabbar" aria-label="Bagian situs">
   <div class="wrap">
     <div role="tablist" aria-label="Pilih bagian">
-      <button role="tab" id="tab-koleksi" aria-controls="panel-koleksi" aria-selected="true" tabindex="0">Koleksi APK &amp; Ekstensi</button>
-      <button role="tab" id="tab-inspirasi" aria-controls="panel-inspirasi" aria-selected="false" tabindex="-1">Inspirasi</button>
+      <button role="tab" id="tab-inspirasi" aria-controls="panel-inspirasi" aria-selected="true" tabindex="0">Inspirasi</button>
+      <button role="tab" id="tab-koleksi" aria-controls="panel-koleksi" aria-selected="false" tabindex="-1">Aplikasi &amp; Ekstensi</button>
     </div>
   </div>
 </nav>
 
 <main id="konten" class="wrap">
-  <section role="tabpanel" id="panel-koleksi" aria-labelledby="tab-koleksi" tabindex="-1">
-    <h2>Koleksi APK &amp; Ekstensi</h2>
-    <p class="lead">Aplikasi Android dan ekstensi untuk pembaca layar JieShuo. Pilih satu, lalu tekan Unduh.</p>
-    <div class="grid" id="list-koleksi"><p class="empty">Memuat koleksi...</p></div>
-  </section>
-
-  <section role="tabpanel" id="panel-inspirasi" aria-labelledby="tab-inspirasi" tabindex="-1" hidden>
+  <section role="tabpanel" id="panel-inspirasi" aria-labelledby="tab-inspirasi" tabindex="-1">
     <h2>Inspirasi</h2>
     <p class="lead">Catatan harian, ide, dan kata-kata yang menjaga semangat.</p>
-    <div class="grid" id="list-inspirasi"><p class="empty">Memuat tulisan...</p></div>
+    <div class="cards" id="list-inspirasi"><p class="empty">Memuat tulisan...</p></div>
     <button class="btn ghost more" id="lagi" type="button" hidden>Tampilkan tulisan lebih lama</button>
+  </section>
+
+  <section role="tabpanel" id="panel-koleksi" aria-labelledby="tab-koleksi" tabindex="-1" hidden>
+    <h2>Aplikasi &amp; Ekstensi</h2>
+    <p class="lead">Aplikasi Android dan ekstensi untuk pembaca layar JieShuo. Pilih satu, lalu tekan Unduh.</p>
+    <div class="cards" id="list-koleksi"><p class="empty">Memuat koleksi...</p></div>
   </section>
 </main>
 
 <footer>
-  <div class="wrap">
-    <p>&copy; 2026 UniKorn Studio</p>
-    <p>Dibuat oleh Maswan</p>
-  </div>
+  <p>Dibuat oleh <strong>Maswan</strong> &bull; UniKorn Studio</p>
 </footer>
 
 <script>
-/* ====== PENGATURAN (biasanya tidak perlu diubah) ======
-   Alamat repositori dibaca otomatis dari alamat situs github.io.
+/* Alamat repositori dibaca otomatis dari alamat github.io.
    Kalau memakai domain sendiri, isi OWNER dan REPO secara manual. */
 var OWNER = "", REPO = "";
 var PER_HALAMAN = 10;
@@ -144,7 +147,6 @@ function repoInfo() {
   const seg = location.pathname.split("/").filter(Boolean)[0];
   return { o: o, r: (seg && seg.indexOf(".") < 0) ? seg : o + ".github.io" };
 }
-
 function listDir(dir) {
   const i = repoInfo();
   if (!i) return Promise.reject(new Error("lokal"));
@@ -153,8 +155,7 @@ function listDir(dir) {
     .then(a => a.filter(f => f.type === "file"));
 }
 const getText = (path) => fetch(path).then(r => { if (!r.ok) throw new Error("x"); return r.text(); }).then(t => t.replace(/^\uFEFF/, ""));
-const bukan = (n) => /^\./.test(n) || /^baca-saya/i.test(n);
-
+const abaikan = (n) => /^\./.test(n) || /^baca-saya/i.test(n);
 function pesanGagal(box, err) {
   box.textContent = "";
   box.appendChild(el("p", "empty", err && err.message === "lokal"
@@ -162,7 +163,7 @@ function pesanGagal(box, err) {
     : "Daftar belum bisa dimuat. Coba muat ulang halaman beberapa saat lagi."));
 }
 
-/* ---- Koleksi: baca folder apk/ dan ekstensi/ ---- */
+/* Aplikasi & Ekstensi: folder apk/ dan ekstensi/ digabung */
 function loadKoleksi() {
   const box = document.getElementById("list-koleksi");
   Promise.all([listDir("apk"), listDir("ekstensi")]).then(hasil => {
@@ -172,23 +173,21 @@ function loadKoleksi() {
     dirs.forEach(d => {
       const txt = {};
       d[2].forEach(f => { if (/\.txt$/i.test(f.name)) txt[f.name.replace(/\.txt$/i, "").toLowerCase()] = f.name; });
-      d[2].filter(f => !/\.(txt|md)$/i.test(f.name) && !bukan(f.name)).sort((a, b) => a.name.localeCompare(b.name)).forEach(f => {
+      d[2].filter(f => !/\.(txt|md)$/i.test(f.name) && !abaikan(f.name)).sort((a, b) => a.name.localeCompare(b.name)).forEach(f => {
         jumlah++;
         const dasar = f.name.replace(/\.[^.]+$/, "");
-        const nama = dasar.replace(/[_]+/g, " ");
+        const nama = dasar.replace(/_+/g, " ");
         const c = el("article", "card");
         c.appendChild(el("span", "kind", d[1]));
         c.appendChild(el("h3", "", nama));
-        const p = el("p", "", "");
-        c.appendChild(p);
+        const p = el("p", "", ""); c.appendChild(p);
         const kb = f.size >= 1048576 ? (f.size / 1048576).toFixed(1) + " MB" : Math.max(1, Math.round(f.size / 1024)) + " KB";
         c.appendChild(el("span", "size", "Ukuran " + kb));
         const a = el("a", "btn primary", "Unduh");
         a.href = d[0] + "/" + encodeURIComponent(f.name);
         a.setAttribute("download", f.name);
         a.setAttribute("aria-label", "Unduh " + nama + ", ukuran " + kb);
-        c.appendChild(a);
-        box.appendChild(c);
+        c.appendChild(a); box.appendChild(c);
         const tf = txt[dasar.toLowerCase()];
         if (tf) getText(d[0] + "/" + encodeURIComponent(tf)).then(t => { p.textContent = t.trim(); }).catch(() => {});
       });
@@ -197,7 +196,7 @@ function loadKoleksi() {
   }).catch(e => pesanGagal(box, e));
 }
 
-/* ---- Inspirasi: satu file teks per hari di folder jurnal/ ---- */
+/* Inspirasi: satu file teks per hari di folder jurnal/ */
 let jurnalNama = [], tampil = 0;
 function tglIndo(nama) {
   const m = nama.match(/^(\d{4})-(\d{2})-(\d{2})/);
@@ -207,12 +206,11 @@ function tglIndo(nama) {
 }
 function tampilkanJurnal() {
   const box = document.getElementById("list-inspirasi");
-  const lagi = document.getElementById("lagi");
   jurnalNama.slice(tampil, tampil + PER_HALAMAN).forEach(nama => {
     const t = tglIndo(nama);
     const c = el("article", "card note");
     const tm = el("time", "", t.teks); if (t.iso) tm.setAttribute("datetime", t.iso);
-    const h = el("h3", "", ""); const p = el("p", "", "");
+    const h = el("h3", "", ""), p = el("p", "", "");
     c.appendChild(tm); c.appendChild(h); c.appendChild(p); box.appendChild(c);
     getText("jurnal/" + encodeURIComponent(nama)).then(isi => {
       const baris = isi.replace(/\r/g, "").trim().split("\n");
@@ -221,55 +219,59 @@ function tampilkanJurnal() {
     }).catch(() => { h.textContent = "Tulisan belum bisa dimuat"; });
   });
   tampil += PER_HALAMAN;
-  lagi.hidden = tampil >= jurnalNama.length;
+  document.getElementById("lagi").hidden = tampil >= jurnalNama.length;
 }
 function loadInspirasi() {
   const box = document.getElementById("list-inspirasi");
   listDir("jurnal").then(files => {
     box.textContent = "";
-    jurnalNama = files.map(f => f.name).filter(n => /\.txt$/i.test(n) && !bukan(n)).sort().reverse();
+    jurnalNama = files.map(f => f.name).filter(n => /\.txt$/i.test(n) && !abaikan(n)).sort().reverse();
     if (!jurnalNama.length) { box.appendChild(el("p", "empty", "Belum ada tulisan. Tambahkan file teks bernama tanggal, misalnya 2026-11-19.txt, ke folder jurnal.")); return; }
     tampilkanJurnal();
   }).catch(e => pesanGagal(box, e));
 }
 document.getElementById("lagi").addEventListener("click", tampilkanJurnal);
-loadKoleksi(); loadInspirasi();
+loadInspirasi(); loadKoleksi();
 
 /* Tab */
-var tabs=[].slice.call(document.querySelectorAll("[role=tab]"));
-function show(name,focus){
-  tabs.forEach(function(t){
-    var on=t.id==="tab-"+name;
-    t.setAttribute("aria-selected",on); t.tabIndex=on?0:-1;
-    document.getElementById(t.getAttribute("aria-controls")).hidden=!on;
-    if(on&&focus)t.focus();
+const tabs = [].slice.call(document.querySelectorAll("[role=tab]"));
+function show(name, fokus) {
+  tabs.forEach(t => {
+    const on = t.id === "tab-" + name;
+    t.setAttribute("aria-selected", on); t.tabIndex = on ? 0 : -1;
+    document.getElementById(t.getAttribute("aria-controls")).hidden = !on;
+    if (on && fokus) t.focus();
   });
 }
-tabs.forEach(function(t,i){
-  t.addEventListener("click",function(){show(t.id.replace("tab-",""));});
-  t.addEventListener("keydown",function(e){
-    var n=null;
-    if(e.key==="ArrowRight"||e.key==="ArrowLeft")n=tabs[(i+1)%tabs.length];
-    if(e.key==="Home")n=tabs[0]; if(e.key==="End")n=tabs[tabs.length-1];
-    if(n){e.preventDefault();show(n.id.replace("tab-",""),true);}
+tabs.forEach((t, i) => {
+  t.addEventListener("click", () => show(t.id.replace("tab-", "")));
+  t.addEventListener("keydown", e => {
+    let n = null;
+    if (e.key === "ArrowRight" || e.key === "ArrowLeft") n = tabs[(i + 1) % tabs.length];
+    if (e.key === "Home") n = tabs[0];
+    if (e.key === "End") n = tabs[tabs.length - 1];
+    if (n) { e.preventDefault(); show(n.id.replace("tab-", ""), true); }
   });
 });
-[].forEach.call(document.querySelectorAll("[data-go]"),function(b){
-  b.addEventListener("click",function(){
-    show(b.dataset.go);
-    var p=document.getElementById("panel-"+b.dataset.go);
-    p.scrollIntoView({block:"start"}); p.focus({preventScroll:true});
-  });
-});
+document.querySelectorAll("[data-go]").forEach(b => b.addEventListener("click", () => {
+  show(b.dataset.go);
+  const p = document.getElementById("panel-" + b.dataset.go);
+  p.scrollIntoView({ block: "start" }); p.focus({ preventScroll: true });
+}));
+
+/* Tinggi header untuk tab yang menempel */
+const hdr = document.getElementById("top");
+function ukurHeader() { document.documentElement.style.setProperty("--hh", hdr.offsetHeight + "px"); }
+ukurHeader(); window.addEventListener("resize", ukurHeader); window.addEventListener("load", ukurHeader);
 
 /* Tema */
-var root=document.documentElement, tbtn=document.getElementById("theme");
-function setTheme(t){root.setAttribute("data-theme",t); tbtn.textContent=t==="dark"?"Mode terang":"Mode gelap";}
-var saved=null; try{saved=localStorage.getItem("unikorn-tema");}catch(e){}
-setTheme(saved||"dark");
-tbtn.addEventListener("click",function(){
-  var n=root.getAttribute("data-theme")==="dark"?"light":"dark"; setTheme(n);
-  try{localStorage.setItem("unikorn-tema",n);}catch(e){}
+const root = document.documentElement, tbtn = document.getElementById("theme");
+function setTema(t) { root.setAttribute("data-theme", t); tbtn.textContent = t === "dark" ? "Mode terang" : "Mode gelap"; }
+let simpan = null; try { simpan = localStorage.getItem("unikorn-theme"); } catch (e) {}
+setTema(simpan === "light" ? "light" : "dark");
+tbtn.addEventListener("click", () => {
+  const n = root.getAttribute("data-theme") === "dark" ? "light" : "dark"; setTema(n);
+  try { localStorage.setItem("unikorn-theme", n); } catch (e) {}
 });
 </script>
 </body>

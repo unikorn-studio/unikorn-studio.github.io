@@ -69,6 +69,14 @@ h2{text-wrap:balance}
 .size{font-size:.88rem;color:var(--muted)}
 .card .btn{margin-top:auto;align-self:flex-start;padding:.6rem 1.15rem;font-size:.95rem}
 .empty{color:var(--muted)}
+.daftar{margin-bottom:1.5rem}
+.kecil{padding:.6rem 1.1rem;font-size:.92rem}
+.panel{margin-top:.75rem;background:var(--glass);border:1px solid var(--line);border-radius:16px;padding:.35rem;max-height:55vh;overflow-y:auto}
+.panel ul{list-style:none}
+.panel a{display:flex;flex-direction:column;gap:.1rem;padding:.7rem .85rem;border-radius:10px;text-decoration:none;color:var(--text)}
+.panel a:hover{background:rgba(139,92,246,.14)}
+.panel .jd{font-weight:600;text-wrap:balance}
+.panel .tgl{font-size:.82rem;color:var(--accent-text)}
 .more{display:block;margin:1.5rem auto 0}
 [hidden]{display:none!important}
 footer{position:fixed;left:0;right:0;bottom:0;z-index:30;padding:.6rem 1rem calc(.6rem + env(safe-area-inset-bottom,0px));text-align:center;font-size:.82rem;color:var(--muted);background:var(--glass);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-top:1px solid var(--line)}
@@ -111,6 +119,10 @@ footer strong{color:var(--text);font-weight:600}
   <section role="tabpanel" id="panel-inspirasi" aria-labelledby="tab-inspirasi" tabindex="-1">
     <h2>Inspirasi</h2>
     <p class="lead">Catatan harian, ide, dan kata-kata yang menjaga semangat.</p>
+    <div class="daftar">
+      <button class="btn ghost kecil" id="daftar-btn" type="button" aria-expanded="false" aria-controls="daftar-panel" hidden>Daftar judul</button>
+      <div class="panel" id="daftar-panel" role="region" aria-label="Daftar judul tulisan" hidden><ul id="daftar-list"></ul></div>
+    </div>
     <div class="cards" id="list-inspirasi"><p class="empty">Memuat tulisan...</p></div>
     <button class="btn ghost more" id="lagi" type="button" hidden>Tampilkan tulisan lebih lama</button>
   </section>
@@ -192,7 +204,10 @@ function loadKoleksi() {
 }
 
 /* Inspirasi: satu file teks per hari di folder jurnal/ */
+const $ = (id) => document.getElementById(id);
 let jurnalNama = [], tampil = 0;
+const judulCache = {};
+const idKartu = (nama) => "t-" + nama.replace(/\.txt$/i, "").replace(/[^\w-]/g, "-");
 function tglIndo(nama) {
   const m = nama.match(/^(\d{4})-(\d{2})-(\d{2})/);
   if (!m) return { teks: nama.replace(/\.txt$/i, ""), iso: "" };
@@ -200,32 +215,77 @@ function tglIndo(nama) {
   return { teks: d.toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" }), iso: m[1] + "-" + m[2] + "-" + m[3] };
 }
 function tampilkanJurnal() {
-  const box = document.getElementById("list-inspirasi");
+  const box = $("list-inspirasi");
   jurnalNama.slice(tampil, tampil + PER_HALAMAN).forEach(nama => {
     const t = tglIndo(nama);
-    const c = el("article", "card note");
+    const c = el("article", "card note"); c.id = idKartu(nama);
     const tm = el("time", "", t.teks); if (t.iso) tm.setAttribute("datetime", t.iso);
-    const h = el("h3", "", ""), p = el("p", "", "");
+    const h = el("h3", "", ""), p = el("p", "", ""); h.tabIndex = -1;
     c.appendChild(tm); c.appendChild(h); c.appendChild(p); box.appendChild(c);
     getText("jurnal/" + encodeURIComponent(nama)).then(isi => {
       const baris = isi.replace(/\r/g, "").trim().split("\n");
       h.textContent = baris[0] || "";
+      judulCache[nama] = h.textContent;
       p.textContent = baris.slice(1).join("\n").trim();
     }).catch(() => { h.textContent = "Tulisan belum bisa dimuat"; });
   });
   tampil += PER_HALAMAN;
-  document.getElementById("lagi").hidden = tampil >= jurnalNama.length;
+  $("lagi").hidden = tampil >= jurnalNama.length;
 }
+
+/* Panel daftar judul */
+const dBtn = $("daftar-btn"), dPanel = $("daftar-panel"), dList = $("daftar-list");
+let daftarSiap = false, antre = [], aktif = 0;
+function jalan() { while (aktif < 6 && antre.length) { aktif++; antre.shift()().finally(() => { aktif--; jalan(); }); } }
+function isiDaftar() {
+  dList.textContent = "";
+  jurnalNama.forEach((nama, i) => {
+    const t = tglIndo(nama);
+    const li = el("li"), a = el("a");
+    a.href = "#" + idKartu(nama);
+    const jd = el("span", "jd", judulCache[nama] || "Memuat judul...");
+    a.appendChild(jd); a.appendChild(el("span", "tgl", t.teks));
+    li.appendChild(a); dList.appendChild(li);
+    a.addEventListener("click", e => { e.preventDefault(); bukaTulisan(i); });
+    if (!judulCache[nama]) {
+      antre.push(() => getText("jurnal/" + encodeURIComponent(nama)).then(isi => {
+        const j = isi.replace(/\r/g, "").trim().split("\n")[0] || t.teks;
+        judulCache[nama] = j; jd.textContent = j;
+      }).catch(() => { jd.textContent = t.teks; }));
+    }
+  });
+  jalan();
+}
+function bukaDaftar() {
+  dPanel.hidden = false; dBtn.setAttribute("aria-expanded", "true");
+  if (!daftarSiap) { isiDaftar(); daftarSiap = true; }
+}
+function tutupDaftar(fokus) {
+  dPanel.hidden = true; dBtn.setAttribute("aria-expanded", "false");
+  if (fokus) dBtn.focus();
+}
+function bukaTulisan(i) {
+  while (tampil <= i && tampil < jurnalNama.length) tampilkanJurnal();
+  const c = $(idKartu(jurnalNama[i]));
+  tutupDaftar(false);
+  if (!c) return;
+  c.scrollIntoView({ block: "start" });
+  const h = c.querySelector("h3"); if (h) h.focus({ preventScroll: true });
+}
+dBtn.addEventListener("click", () => dPanel.hidden ? bukaDaftar() : tutupDaftar(false));
+document.addEventListener("keydown", e => { if (e.key === "Escape" && !dPanel.hidden) tutupDaftar(true); });
+
 function loadInspirasi() {
-  const box = document.getElementById("list-inspirasi");
+  const box = $("list-inspirasi");
   listDir("jurnal").then(files => {
     box.textContent = "";
     jurnalNama = files.map(f => f.name).filter(n => /\.txt$/i.test(n) && !abaikan(n)).sort().reverse();
     if (!jurnalNama.length) { box.appendChild(el("p", "empty", "Belum ada tulisan. Tambahkan file teks bernama tanggal, misalnya 2026-11-19.txt, ke folder jurnal.")); return; }
+    dBtn.textContent = "Daftar judul (" + jurnalNama.length + ")"; dBtn.hidden = false;
     tampilkanJurnal();
   }).catch(e => pesanGagal(box, e));
 }
-document.getElementById("lagi").addEventListener("click", tampilkanJurnal);
+$("lagi").addEventListener("click", tampilkanJurnal);
 loadInspirasi(); loadKoleksi();
 
 /* Tab */
